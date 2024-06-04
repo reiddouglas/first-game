@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-@export var MAX_VELOCITY = 50
+@export var MAX_VELOCITY = 500
 @export var GROUND_ACCELERATION = 500
 @export var AIR_ACCELERATION = 250
 @export var JUMP_ACCELERATION = 25_000
@@ -12,30 +12,21 @@ extends CharacterBody2D
 @onready var sprite = $AnimatedSprite2D
 @onready var direction = Vector2.ZERO
 
-#Enums
-enum IN_AIR_STATE {GROUND = 0, AIR}
-enum IN_AIR_MOVEMENT {FALLING = 0, JUMPING}
-enum ON_GROUND_MOVEMENT {IDLING = 0, RUNNING, TURNING}
-
 func _ready():
 	animation_tree.active = true
 	
 
 func start(pos):
 	position = pos
-	print(IN_AIR_STATE)
 
 func _physics_process(delta):
-	
 	get_input_axis()
-	
-	print(velocity.y)
 	
 	if is_on_floor():
 		move_ground(delta)
 	else:
 		move_air(delta)
-	
+		
 	if sign(velocity.x) != 0:
 		switch_direction(sign(velocity.x))
 
@@ -47,29 +38,41 @@ func get_input_axis():
 
 func move_ground(delta):
 	animation_tree.set("parameters/in_air_state/transition_request","ground")
+	#sliding
 	if (direction.x == 0 or sign(direction.x) != sign(velocity.x)) and velocity.x != 0:
 		animation_tree.set("parameters/on_ground_movement/transition_request","turning")
 		apply_horizontal_ground_friction(delta)
+	#idling
 	elif direction.x == 0 and velocity.x == 0:
 		animation_tree.set("parameters/on_ground_movement/transition_request","idling")
+	#running
 	else:
 		animation_tree.set("parameters/on_ground_movement/transition_request","running")
+		animation_tree.set("parameters/movement_time/scale",abs(velocity.x) * 2/MAX_VELOCITY)
 		apply_movement(direction * Vector2.RIGHT, GROUND_ACCELERATION, delta)
+	
+	#jumping
 	if direction.y < 0 and is_on_floor():
 		apply_jump(delta)
 	move_and_slide()
 	
 func move_air(delta):
 	animation_tree.set("parameters/in_air_state/transition_request","air")
+	
+	#constant gravity causing the player to fall
 	fall(GRAVITY, delta)
+	
+	#air resistance
 	if direction == Vector2.ZERO or (sign(direction.x) != sign(velocity.x) and velocity.x != 0):
 		apply_horizontal_air_resistance(delta)
+	#air acceleration
 	else:
 		apply_movement(direction * Vector2.RIGHT, AIR_ACCELERATION, delta)
 		
-	# change animation to falling if moving downwards in air, otherwise character is jumping upwards
+	# falling
 	if velocity.y > 0:
 		animation_tree.set("parameters/in_air_movement/transition_request","falling")
+	# jumping (upwards falling)
 	else:
 		# set the animation here in case character can move upwards without jumping
 		animation_tree.set("parameters/in_air_movement/transition_request","jumping")
