@@ -1181,7 +1181,6 @@ input_2/reset = true
 animation = &"run"
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_tmxls"]
-graph_offset = Vector2(-467.326, 25.7466)
 nodes/Animation/node = SubResource("AnimationNodeAnimation_d34ci")
 nodes/Animation/position = Vector2(140, 280)
 nodes/fall/node = SubResource("AnimationNodeAnimation_n448y")
@@ -1205,6 +1204,7 @@ node_connections = [&"in_air_movement", 0, &"fall", &"in_air_movement", 1, &"jum
 
 [node name="Player" type="CharacterBody2D"]
 position = Vector2(4, 0)
+scale = Vector2(2, 2)
 script = ExtResource("1_dh3cf")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
