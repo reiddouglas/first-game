@@ -1,12 +1,13 @@
 extends CharacterBody2D
 
-@export var MAX_VELOCITY = 500
-@export var GROUND_ACCELERATION = 500
-@export var AIR_ACCELERATION = 250
-@export var JUMP_ACCELERATION = 25_000
-@export var FRICTION = 1000
-@export var AIR_RESISTANCE = 100
-@export var GRAVITY = 1000
+var MAX_HORIZONTAL_VELOCITY = 250
+var MAX_VERTICAL_VELOCITY = 500
+var GROUND_ACCELERATION = 500
+var AIR_ACCELERATION = 250
+var FRICTION = 1000
+var AIR_RESISTANCE = 500
+var GRAVITY = 1000
+var JUMP_ACCELERATION = GRAVITY + 400 * 60 # use suvat calc to determine how high you want the jump
 
 @onready var animation_tree = $AnimationTree
 @onready var sprite = $AnimatedSprite2D
@@ -19,6 +20,7 @@ func _ready():
 func start(pos):
 	position = pos
 
+# 60 times a second
 func _physics_process(delta):
 	get_input_axis()
 	
@@ -48,7 +50,7 @@ func move_ground(delta):
 	#running
 	else:
 		animation_tree.set("parameters/on_ground_movement/transition_request","running")
-		animation_tree.set("parameters/movement_time/scale",abs(velocity.x) * 2/MAX_VELOCITY)
+		animation_tree.set("parameters/movement_time/scale",abs(velocity.x) * 2/MAX_HORIZONTAL_VELOCITY)
 		apply_movement(direction * Vector2.RIGHT, GROUND_ACCELERATION, delta)
 	
 	#jumping
@@ -60,7 +62,7 @@ func move_air(delta):
 	animation_tree.set("parameters/in_air_state/transition_request","air")
 	
 	#constant gravity causing the player to fall
-	fall(GRAVITY, delta)
+	fall(delta)
 	
 	#air resistance
 	if direction == Vector2.ZERO or (sign(direction.x) != sign(velocity.x) and velocity.x != 0):
@@ -100,13 +102,14 @@ func apply_vertical_friction(friction, delta):
 
 func apply_movement(dir, accel, delta):
 	velocity += dir * accel * delta
-	velocity = velocity.limit_length(MAX_VELOCITY)
+	velocity.x = sign(velocity.x) * min(abs(velocity.x), MAX_HORIZONTAL_VELOCITY)
+	velocity.y = sign(velocity.y) * min(abs(velocity.y), MAX_VERTICAL_VELOCITY)
 
 func apply_jump(delta):
 	apply_movement(Vector2.UP, JUMP_ACCELERATION, delta)
 
-func fall(accel, delta):
-	apply_movement(Vector2.DOWN, accel, delta)
+func fall(delta):
+	apply_movement(Vector2.DOWN, GRAVITY, delta)
 		
 func switch_direction(horizontal_direction):
 	sprite.flip_h = (horizontal_direction == -1)
