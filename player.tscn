@@ -1206,7 +1206,6 @@ node_connections = [&"in_air_movement", 0, &"fall", &"in_air_movement", 1, &"jum
 [node name="Player" type="CharacterBody2D"]
 position = Vector2(4, 0)
 script = ExtResource("1_dh3cf")
-GRAVITY = 1726
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(4, -39)
