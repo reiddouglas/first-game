@@ -71,6 +71,9 @@ func move_air(delta):
 	else:
 		apply_movement(direction * Vector2.RIGHT, AIR_ACCELERATION, delta)
 		
+	if direction.y > 0:
+		apply_fall(delta)
+		
 	# falling
 	if velocity.y > 0:
 		animation_tree.set("parameters/in_air_movement/transition_request","falling")
@@ -107,6 +110,9 @@ func apply_movement(dir, accel, delta):
 
 func apply_jump(delta):
 	apply_movement(Vector2.UP, JUMP_ACCELERATION, delta)
+	
+func apply_fall(delta):
+	apply_movement(Vector2.DOWN, JUMP_ACCELERATION, delta)
 
 func fall(delta):
 	apply_movement(Vector2.DOWN, GRAVITY, delta)
