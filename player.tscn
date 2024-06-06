@@ -1205,13 +1205,14 @@ node_connections = [&"in_air_movement", 0, &"fall", &"in_air_movement", 1, &"jum
 
 [node name="Player" type="CharacterBody2D"]
 scale = Vector2(2, 2)
+collision_mask = 30
 script = ExtResource("1_dh3cf")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(4, -39)
 sprite_frames = SubResource("SpriteFrames_or53a")
 animation = &"idle"
-frame = 9
+frame = 5
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -18)
@@ -1223,9 +1224,6 @@ libraries = {
 }
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_ffqqg")
-}
 tree_root = SubResource("AnimationNodeBlendTree_tmxls")
 anim_player = NodePath("../AnimationPlayer")
 parameters/in_air_movement/current_state = ""
