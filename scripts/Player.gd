@@ -7,7 +7,7 @@ var AIR_ACCELERATION = 250
 var FRICTION = 1000
 var AIR_RESISTANCE = 500
 var GRAVITY = 1000
-var JUMP_ACCELERATION = GRAVITY + 400 * 60 # use suvat calc to determine how high you want the jump
+var JUMP_ACCELERATION = GRAVITY + 500 * 60 # use suvat calc to determine how high you want the jump
 
 @onready var animation_tree = $AnimationTree
 @onready var sprite = $AnimatedSprite2D
@@ -15,7 +15,7 @@ var JUMP_ACCELERATION = GRAVITY + 400 * 60 # use suvat calc to determine how hig
 
 func _ready():
 	animation_tree.active = true
-	
+	floor_snap_length = 5.0 #prevent character from bouncing down slopes
 
 func start(pos):
 	position = pos

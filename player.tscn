@@ -833,7 +833,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qj5jj"]
-size = Vector2(11, 37.5)
+size = Vector2(11, 36)
 
 [sub_resource type="Animation" id="Animation_uy0pf"]
 length = 0.001
@@ -1181,7 +1181,7 @@ input_2/reset = true
 animation = &"run"
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_tmxls"]
-graph_offset = Vector2(-467.326, 25.7466)
+graph_offset = Vector2(-106.562, -14.5785)
 nodes/Animation/node = SubResource("AnimationNodeAnimation_d34ci")
 nodes/Animation/position = Vector2(140, 280)
 nodes/fall/node = SubResource("AnimationNodeAnimation_n448y")
@@ -1204,17 +1204,18 @@ nodes/run/position = Vector2(-40, 160)
 node_connections = [&"in_air_movement", 0, &"fall", &"in_air_movement", 1, &"jump", &"in_air_state", 0, &"on_ground_movement", &"in_air_state", 1, &"in_air_movement", &"movement_time", 0, &"run", &"on_ground_movement", 0, &"idle", &"on_ground_movement", 1, &"movement_time", &"on_ground_movement", 2, &"Animation", &"output", 0, &"in_air_state"]
 
 [node name="Player" type="CharacterBody2D"]
-position = Vector2(4, 0)
+scale = Vector2(2, 2)
+collision_mask = 30
 script = ExtResource("1_dh3cf")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(4, -39)
 sprite_frames = SubResource("SpriteFrames_or53a")
-animation = &"turn"
-frame = 2
+animation = &"idle"
+frame = 5
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(1, -19)
+position = Vector2(0, -18)
 shape = SubResource("RectangleShape2D_qj5jj")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
@@ -1223,18 +1224,15 @@ libraries = {
 }
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_ffqqg")
-}
 tree_root = SubResource("AnimationNodeBlendTree_tmxls")
 anim_player = NodePath("../AnimationPlayer")
 parameters/in_air_movement/current_state = ""
 parameters/in_air_movement/transition_request = "falling"
 parameters/in_air_movement/current_index = -1
-parameters/in_air_state/current_state = ""
+parameters/in_air_state/current_state = "ground"
 parameters/in_air_state/transition_request = ""
-parameters/in_air_state/current_index = -1
+parameters/in_air_state/current_index = 0
 parameters/movement_time/scale = 0.85
-parameters/on_ground_movement/current_state = "turning"
+parameters/on_ground_movement/current_state = "idling"
 parameters/on_ground_movement/transition_request = ""
-parameters/on_ground_movement/current_index = 2
+parameters/on_ground_movement/current_index = 0
