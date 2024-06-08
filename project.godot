@@ -11,13 +11,13 @@ config_version=5
 [application]
 
 config/name="the_box"
-run/main_scene="res://main.tscn"
+run/main_scene="res://scenes/levels/Level.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]
 
-MoveUtils="*res://scripts/MoveUtils.gd"
+PlayerData="*res://scripts/autoloads/PlayerData.gd"
 
 [display]
 
