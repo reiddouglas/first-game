@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://b6wul0x31njey"]
+[gd_scene load_steps=9 format=3 uid="uid://b6wul0x31njey"]
 
 [ext_resource type="Script" path="res://scripts/levels/Level.gd" id="1_f8cr8"]
 [ext_resource type="PackedScene" uid="uid://w48j3wuayjtj" path="res://scenes/ui/PlayerUI.tscn" id="2_6ljmb"]
-[ext_resource type="PackedScene" uid="uid://bmmq1ax0f1gpt" path="res://scenes/player/Player.tscn" id="2_ddhyt"]
+[ext_resource type="PackedScene" uid="uid://bmmq1ax0f1gpt" path="res://scenes/entities/player/Player.tscn" id="2_ddhyt"]
 [ext_resource type="Texture2D" uid="uid://dumgdiamjo31y" path="res://sprites/Hero's Journey - Moon Graveyard/Tiles.png" id="3_ci6oy"]
 [ext_resource type="PackedScene" uid="uid://wnq6ed1bghg" path="res://scenes/levels/LevelEnd.tscn" id="4_yl1hx"]
+[ext_resource type="PackedScene" uid="uid://4h3q4qr7swiy" path="res://scenes/entities/enemies/Slime.tscn" id="6_cc83n"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_62lcg"]
 texture = ExtResource("3_ci6oy")
@@ -353,6 +354,7 @@ editor_draw_drag_margin = true
 tile_set = SubResource("TileSet_bl82a")
 format = 2
 layer_0/name = "Background"
+layer_0/tile_data = PackedInt32Array(65535, 131072, 1, 0, 131072, 1, -1, 131072, 0, -65536, 131072, 0, 1, 131072, 1, 65534, 131072, 1, 65533, 131072, 1, 65532, 131072, 1, -2, 131072, 0, -3, 131072, 0, -4, 131072, 0, -65535, 131072, 0, 65531, 196608, 3, -5, 196608, 2, -65541, 196608, 2, -131077, 196608, 1, -196613, 196608, 0, -196614, 131072, 0, -131078, 131072, 1, -65542, 131072, 4, -6, 131072, 4, 65530, 131072, 4)
 layer_1/name = "Mid"
 layer_1/z_index = 2
 layer_1/tile_data = PackedInt32Array()
@@ -364,3 +366,9 @@ layer_2/tile_data = PackedInt32Array()
 position = Vector2(128, 0)
 
 [node name="PlayerUi" parent="." instance=ExtResource("2_6ljmb")]
+
+[node name="Slime" parent="." instance=ExtResource("6_cc83n")]
+position = Vector2(-98, -75)
+
+[node name="Slime2" parent="." instance=ExtResource("6_cc83n")]
+position = Vector2(-77, -26)

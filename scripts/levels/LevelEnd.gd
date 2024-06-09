@@ -2,7 +2,7 @@ extends Area2D
 
 @onready var timer = $Timer
 
-func _on_body_entered(body):
+func _on_body_entered(_body):
 	timer.start()
 	print("You Win!")
 	#add level end animation and such

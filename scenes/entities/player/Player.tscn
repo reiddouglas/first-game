@@ -1,6 +1,6 @@
-[gd_scene load_steps=147 format=3 uid="uid://bmmq1ax0f1gpt"]
+[gd_scene load_steps=149 format=3 uid="uid://bmmq1ax0f1gpt"]
 
-[ext_resource type="Script" path="res://scripts/player/Player.gd" id="1_dh3cf"]
+[ext_resource type="Script" path="res://scripts/entities/player/Player.gd" id="1_vaawn"]
 [ext_resource type="Texture2D" uid="uid://c732ob75gskvl" path="res://sprites/knight/Colour1/NoOutline/120x80_PNGSheets/_Attack.png" id="2_brk0s"]
 [ext_resource type="Texture2D" uid="uid://cptu1u1g18ima" path="res://sprites/knight/Colour1/NoOutline/120x80_PNGSheets/_Fall.png" id="2_cgicc"]
 [ext_resource type="Texture2D" uid="uid://bwkllr7u5f8ai" path="res://sprites/knight/Colour1/NoOutline/120x80_PNGSheets/_AttackNoMovement.png" id="3_aq2ql"]
@@ -1202,16 +1202,22 @@ nodes/run/node = SubResource("AnimationNodeAnimation_06t4u")
 nodes/run/position = Vector2(-40, 160)
 node_connections = [&"in_air_movement", 0, &"fall", &"in_air_movement", 1, &"jump", &"in_air_state", 0, &"on_ground_movement", &"in_air_state", 1, &"in_air_movement", &"movement_time", 0, &"run", &"on_ground_movement", 0, &"idle", &"on_ground_movement", 1, &"movement_time", &"on_ground_movement", 2, &"Animation", &"output", 0, &"in_air_state"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_w7wc5"]
+size = Vector2(6.5, 26)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ws8xq"]
+size = Vector2(59.5, 10.75)
+
 [node name="Player" type="CharacterBody2D" groups=["Player"]]
 scale = Vector2(2, 2)
-collision_mask = 30
-script = ExtResource("1_dh3cf")
+collision_mask = 2
+script = ExtResource("1_vaawn")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(4, -39)
 sprite_frames = SubResource("SpriteFrames_or53a")
 animation = &"idle"
-frame = 4
+frame = 9
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -18)
@@ -1238,3 +1244,23 @@ parameters/movement_time/scale = 0.85
 parameters/on_ground_movement/current_state = "idling"
 parameters/on_ground_movement/transition_request = ""
 parameters/on_ground_movement/current_index = 0
+
+[node name="HurtBox" type="Area2D" parent="."]
+collision_mask = 12
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
+position = Vector2(0, -13.5)
+shape = SubResource("RectangleShape2D_w7wc5")
+debug_color = Color(0, 0.65098, 0.145098, 0.419608)
+
+[node name="HitBox" type="Area2D" parent="."]
+visible = false
+collision_mask = 12
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox"]
+position = Vector2(31.75, -10.625)
+shape = SubResource("RectangleShape2D_ws8xq")
+debug_color = Color(1, 0, 0, 0.419608)
