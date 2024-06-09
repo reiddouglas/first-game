@@ -1,4 +1,4 @@
-extends CharacterBody2D
+extends Entity
 
 #Signals
 signal health_changed
@@ -7,30 +7,36 @@ signal gold_changed
 #Physics constants
 const MAX_HORIZONTAL_VELOCITY = 250
 const MAX_VERTICAL_VELOCITY = 500
-const GROUND_ACCELERATION = 500
-const AIR_ACCELERATION = 250
 const FRICTION = 1000
 const AIR_RESISTANCE = 500
 const GRAVITY = 1000
 const JUMP_ACCELERATION = GRAVITY + 500 * 60 # use suvat calc to determine how high you want the jump
 
-#Player attributes
-var health: int
-var max_health: int
-var gold: int
+#Unique Player attributes
+var gold: int: set = _set_gold, get = _get_gold
+
+func _set_gold(new_gold: int):
+	gold = max(new_gold,0)
+
+func _get_gold():
+	return gold
 
 @onready var animation_tree = $AnimationTree
 @onready var sprite = $AnimatedSprite2D
 @onready var direction = Vector2.ZERO
 
 func _ready():
+	super._ready()
+	
 	animation_tree.active = true
 	floor_snap_length = 5.0 #prevent character from bouncing down slopes
 	
 	#player stats
-	health = PlayerData.health
-	max_health = PlayerData.max_health
-	gold = PlayerData.gold
+	_set_max_health(PlayerData.max_health)
+	_set_health(PlayerData.health)
+	_set_speed(PlayerData.speed)
+	_set_attack_power(PlayerData.attack_power)
+	_set_gold(PlayerData.gold)
 	
 	print(health, max_health, gold)
 
@@ -68,7 +74,7 @@ func move_ground(delta):
 	else:
 		animation_tree.set("parameters/on_ground_movement/transition_request","running")
 		animation_tree.set("parameters/movement_time/scale",abs(velocity.x) * 2/MAX_HORIZONTAL_VELOCITY)
-		apply_movement(direction * Vector2.RIGHT, GROUND_ACCELERATION, delta)
+		apply_movement(direction * Vector2.RIGHT, speed, delta)
 	
 	#jumping
 	if direction.y < 0 and is_on_floor():
@@ -86,7 +92,7 @@ func move_air(delta):
 		apply_horizontal_air_resistance(delta)
 	#air acceleration
 	else:
-		apply_movement(direction * Vector2.RIGHT, AIR_ACCELERATION, delta)
+		apply_movement(direction * Vector2.RIGHT, speed, delta)
 		
 	if direction.y > 0:
 		apply_fall(delta)
