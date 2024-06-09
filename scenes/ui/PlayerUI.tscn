@@ -1,13 +1,9 @@
-[gd_scene load_steps=6 format=3 uid="uid://w48j3wuayjtj"]
+[gd_scene load_steps=5 format=3 uid="uid://w48j3wuayjtj"]
 
 [ext_resource type="Script" path="res://scripts/ui/PlayerHealth.gd" id="1_4hxns"]
-[ext_resource type="Texture2D" uid="uid://widfnv70fegn" path="res://sprites/Heart and Healthbars/Heart and health bars/sprites/heart.png" id="2_oejae"]
+[ext_resource type="Texture2D" uid="uid://dt2eoqo2uopee" path="res://sprites/Heart and Healthbars/Heart and health bars/healthbar/standard/horizontal/standard-empty-1.png" id="3_8sjxu"]
 [ext_resource type="Script" path="res://scripts/ui/PlayerGold.gd" id="3_rjap2"]
-
-[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_x8udp"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lm7mh"]
-bg_color = Color(0.705882, 0.101961, 0, 1)
+[ext_resource type="Texture2D" uid="uid://drvlgijr8wr3j" path="res://sprites/Heart and Healthbars/Heart and health bars/healthbar/standard/horizontal/standard-full-1.png" id="4_ay72t"]
 
 [node name="PlayerUi" type="CanvasLayer"]
 
@@ -40,17 +36,10 @@ size_flags_horizontal = 0
 size_flags_vertical = 0
 script = ExtResource("1_4hxns")
 
-[node name="TextureRect" type="TextureRect" parent="Control/MarginContainer/VBoxContainer/PlayerHealth"]
+[node name="HealthBar" type="TextureProgressBar" parent="Control/MarginContainer/VBoxContainer/PlayerHealth"]
 layout_mode = 2
-texture = ExtResource("2_oejae")
-
-[node name="HealthBar" type="ProgressBar" parent="Control/MarginContainer/VBoxContainer/PlayerHealth"]
-custom_minimum_size = Vector2(128, 16)
-layout_mode = 2
-size_flags_vertical = 4
-theme_override_styles/background = SubResource("StyleBoxEmpty_x8udp")
-theme_override_styles/fill = SubResource("StyleBoxFlat_lm7mh")
-show_percentage = false
+texture_under = ExtResource("3_8sjxu")
+texture_progress = ExtResource("4_ay72t")
 
 [node name="PlayerGold" type="HBoxContainer" parent="Control/MarginContainer/VBoxContainer"]
 layout_mode = 2

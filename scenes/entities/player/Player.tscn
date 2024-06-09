@@ -1217,7 +1217,7 @@ script = ExtResource("1_vaawn")
 position = Vector2(4, -39)
 sprite_frames = SubResource("SpriteFrames_or53a")
 animation = &"idle"
-frame = 4
+frame = 9
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, -18)
@@ -1255,8 +1255,10 @@ shape = SubResource("RectangleShape2D_w7wc5")
 debug_color = Color(0, 0.65098, 0.145098, 0.419608)
 
 [node name="HitBox" type="Area2D" parent="."]
+visible = false
 collision_mask = 12
 monitoring = false
+monitorable = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox"]
 position = Vector2(31.75, -10.625)

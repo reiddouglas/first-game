@@ -179,7 +179,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vk77x"]
-size = Vector2(28, 12)
+size = Vector2(28, 19)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xjahs"]
 size = Vector2(30, 14)
@@ -204,8 +204,9 @@ frame_progress = 0.502645
 flip_h = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 5)
+position = Vector2(0, 1.5)
 shape = SubResource("RectangleShape2D_vk77x")
+debug_color = Color(0, 0.596078, 0.72549, 0.419608)
 
 [node name="HurtBox" type="Area2D" parent="."]
 collision_layer = 8
