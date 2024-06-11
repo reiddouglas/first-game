@@ -8,18 +8,23 @@ signal max_health_changed
 signal death
 
 #Variables
-#Physics constants
+#Physics
 var max_horizontal_velocity: int: set = _set_max_horizontal_velocity, get = _get_max_horizontal_velocity
 var max_vertical_velocity: int: set = _set_max_vertical_velocity, get = _get_max_vertical_velocity
 var friction: int: set = _set_friction, get = _get_friction
 var air_resistance: int: set = _set_air_resistance, get = _get_air_resistance
 var jump_acceleration: int: set = _set_jump_acceleration, get = _get_jump_acceleration
 var gravity_mult: float = 1: set = _set_gravity_mult, get = _get_gravity_mult
+
+#Entity stats
 var speed: int: set = _set_speed, get = _get_speed
 var speed_mult: float = 1: set = _set_speed_mult, get = _get_speed_mult
 var max_health: int: set = _set_max_health, get = _get_max_health
 var health: int: set = _set_health, get = _get_health
 var attack_power: int: set = _set_attack_power, get = _get_attack_power
+
+#Entity States
+var attacking: bool = false
 
 #Setters and Getters
 func _set_max_horizontal_velocity(new_max_velocity):
@@ -95,11 +100,15 @@ func _get_attack_power():
 	return attack_power
 
 #Ready functions
+@onready var sprite = $AnimatedSprite2D
+@onready var animation_player = $AnimationPlayer
+@onready var animation_tree = $AnimationTree
 @onready var hurt_box = $HurtBox
 @onready var hit_box = $HitBox
 
 func _ready():
 	hurt_box.area_entered.connect(_on_hurt_box_area_entered)
+	animation_tree.animation_finished.connect(_on_animation_finished)
 
 func apply_horizontal_ground_friction(delta):
 	apply_horizontal_friction(friction, delta)
@@ -135,6 +144,10 @@ func apply_fall(delta):
 func apply_gravity(delta):
 	apply_movement(Vector2.DOWN, Constants.GRAVITY, delta)
 
+# Horizontal direction is the new direction the entity wants to face
+func switch_direction(horizontal_direction):
+	sprite.flip_h = (horizontal_direction == -1)
+
 #Health
 func _fill_health():
 	health = max_health
@@ -160,3 +173,7 @@ func _on_hurt_box_area_entered(hitbox: Area2D):
 	else:
 		printerr("Entity " + str(entity) + " is not valid")
 
+func _on_animation_finished(anim_name: StringName):
+	print(anim_name)
+	if anim_name.contains("attack"):
+		attacking = false
