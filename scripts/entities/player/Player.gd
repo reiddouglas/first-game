@@ -14,8 +14,6 @@ func _get_gold():
 	return gold
 
 #Ready functions
-@onready var animation_tree = $AnimationTree
-@onready var sprite = $AnimatedSprite2D
 @onready var direction = Vector2.ZERO
 
 func _ready():
@@ -37,8 +35,6 @@ func _ready():
 	_set_speed(PlayerData.speed)
 	_set_attack_power(PlayerData.attack_power)
 	_set_gold(PlayerData.gold)
-	
-	print(health, max_health, gold)
 
 func start(pos):
 	position = pos
@@ -47,15 +43,22 @@ func start(pos):
 
 #60 times a second
 func _physics_process(delta):
-	get_input_axis()
-	
-	if is_on_floor():
-		move_ground(delta)
-	else:
-		move_air(delta)
+
+	if attacking == false:
 		
-	if sign(velocity.x) != 0:
-		switch_direction(sign(velocity.x))
+		animation_tree.set("parameters/attacking_state/transition_request","not_attacking")
+		
+		get_input_axis()
+		if is_on_floor():
+			#Check for attack and interupt ground movement
+			if Input.is_action_just_pressed("attack"):
+				attack()
+			move_ground(delta)
+		else:
+			move_air(delta)
+		
+		if sign(velocity.x) != 0:
+			face_direction(sign(velocity.x))
 
 
 func get_input_axis():
@@ -108,6 +111,11 @@ func move_air(delta):
 		animation_tree.set("parameters/in_air_movement/transition_request","jumping")
 	move_and_slide()
 
-func switch_direction(horizontal_direction):
-	sprite.flip_h = (horizontal_direction == -1)
-	sprite.position.x = horizontal_direction * 4
+func face_direction(horizontal_direction):
+	scale.x = scale.y * horizontal_direction
+
+func attack():
+	attacking = true
+	animation_tree.set("parameters/attacking_state/transition_request","attacking")
+
+
