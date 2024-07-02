@@ -108,7 +108,6 @@ func _get_attack_power():
 
 func _ready():
 	hurt_box.area_entered.connect(_on_hurt_box_area_entered)
-	animation_tree.animation_finished.connect(_on_animation_finished)
 
 func apply_horizontal_ground_friction(delta):
 	apply_horizontal_friction(friction, delta)
@@ -157,6 +156,8 @@ func _death():
 	queue_free()
 
 func _on_hurt_box_area_entered(hitbox: Area2D):
+	if hitbox.name != "HitBox":
+		return
 	var entity: Entity = hitbox.get_parent()
 	if entity:
 		#Deal damage to entity if hit
@@ -172,8 +173,3 @@ func _on_hurt_box_area_entered(hitbox: Area2D):
 
 	else:
 		printerr("Entity " + str(entity) + " is not valid")
-
-func _on_animation_finished(anim_name: StringName):
-	print(anim_name)
-	if anim_name.contains("attack"):
-		attacking = false

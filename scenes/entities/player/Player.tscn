@@ -1427,7 +1427,7 @@ animation = &"run"
 animation = &"turn"
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_tmxls"]
-graph_offset = Vector2(-399.845, -39.4208)
+graph_offset = Vector2(-260.847, -23.1726)
 nodes/attack/node = SubResource("AnimationNodeAnimation_4e6re")
 nodes/attack/position = Vector2(260, 220)
 nodes/attacking_state/node = SubResource("AnimationNodeTransition_4ay7u")
@@ -1462,7 +1462,7 @@ script = ExtResource("1_vaawn")
 position = Vector2(4, -39)
 sprite_frames = SubResource("SpriteFrames_or53a")
 animation = &"idle"
-frame = 9
+frame = 8
 
 [node name="CollisionBox" type="CollisionShape2D" parent="."]
 position = Vector2(0, -18)
@@ -1496,7 +1496,6 @@ parameters/on_ground_movement/current_index = 0
 
 [node name="HurtBox" type="Area2D" parent="."]
 collision_mask = 12
-monitorable = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
 position = Vector2(0, -13)

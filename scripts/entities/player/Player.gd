@@ -19,6 +19,7 @@ func _get_gold():
 func _ready():
 	super._ready()
 	
+	animation_tree.animation_finished.connect(_on_animation_finished)
 	animation_tree.active = true
 	floor_snap_length = 5.0 #prevent character from bouncing down slopes
 	
@@ -52,7 +53,7 @@ func _physics_process(delta):
 		if is_on_floor():
 			#Check for attack and interupt ground movement
 			if Input.is_action_just_pressed("attack"):
-				attack()
+				_attack()
 			move_ground(delta)
 		else:
 			move_air(delta)
@@ -114,8 +115,11 @@ func move_air(delta):
 func face_direction(horizontal_direction):
 	scale.x = scale.y * horizontal_direction
 
-func attack():
+func _attack():
 	attacking = true
 	animation_tree.set("parameters/attacking_state/transition_request","attacking")
 
-
+func _on_animation_finished(anim_name: StringName):
+	print(anim_name)
+	if anim_name.contains("attack"):
+		attacking = false
