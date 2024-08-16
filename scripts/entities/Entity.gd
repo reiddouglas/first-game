@@ -22,9 +22,12 @@ var speed_mult: float = 1: set = _set_speed_mult, get = _get_speed_mult
 var max_health: int: set = _set_max_health, get = _get_max_health
 var health: int: set = _set_health, get = _get_health
 var attack_power: int: set = _set_attack_power, get = _get_attack_power
+var invuln_time: float = 1.0: set = _set_invuln_time, get = _get_invuln_time
 
 #Entity States
 var attacking: bool = false
+var stunned: bool = false
+var invulnerable: bool = false
 
 #Setters and Getters
 func _set_max_horizontal_velocity(new_max_velocity):
@@ -99,15 +102,25 @@ func _set_attack_power(new_attack_power: int):
 func _get_attack_power():
 	return attack_power
 
+func _set_invuln_time(new_invuln_time: float):
+	invuln_time = new_invuln_time
+
+func _get_invuln_time():
+	return invuln_time
+
 #Ready functions
 @onready var sprite = $AnimatedSprite2D
 @onready var animation_player = $AnimationPlayer
 @onready var animation_tree = $AnimationTree
 @onready var hurt_box = $HurtBox
+@onready var invuln_timer = $HurtBox/InvulnTimer
 @onready var hit_box = $HitBox
 
 func _ready():
 	hurt_box.area_entered.connect(_on_hurt_box_area_entered)
+	invuln_timer.timeout.connect(_on_invuln_timer_timeout)
+	#make sure to set invuln time for all entities!
+	invuln_timer.wait_time = invuln_time
 
 func apply_horizontal_ground_friction(delta):
 	apply_horizontal_friction(friction, delta)
@@ -152,7 +165,7 @@ func _fill_health():
 	health = max_health
 
 func _death():
-	print(str(self) + " died!")
+	print(name + " died!")
 	queue_free()
 
 func _on_hurt_box_area_entered(hitbox: Area2D):
@@ -171,6 +184,20 @@ func _on_hurt_box_area_entered(hitbox: Area2D):
 		if _get_health() <= 0:
 			emit_signal("death")
 			_death()
+		else:
+			#Invuln frames if entity survives the attack
+			_invuln_enabled(true)
+			invuln_timer.start()
 
 	else:
 		printerr( str(entity) + " is not valid")
+
+func _on_invuln_timer_timeout():
+	print("Invuln ended")
+	_invuln_enabled(false)
+
+func _invuln_enabled(input: bool):
+	invulnerable = input
+	for child in hurt_box.get_children():
+		if child.is_class("CollisionShape2D"):
+			child.set_deferred("disabled",input)

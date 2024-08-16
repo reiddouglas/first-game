@@ -1462,7 +1462,7 @@ script = ExtResource("1_vaawn")
 position = Vector2(4, -39)
 sprite_frames = SubResource("SpriteFrames_or53a")
 animation = &"idle"
-frame = 2
+frame = 5
 
 [node name="CollisionBox" type="CollisionShape2D" parent="."]
 position = Vector2(0, -18)
@@ -1501,6 +1501,9 @@ collision_mask = 12
 position = Vector2(0, -13)
 shape = SubResource("RectangleShape2D_w7wc5")
 debug_color = Color(0, 0.65098, 0.145098, 0.419608)
+
+[node name="InvulnTimer" type="Timer" parent="HurtBox"]
+one_shot = true
 
 [node name="HitBox" type="Area2D" parent="."]
 collision_mask = 12

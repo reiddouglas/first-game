@@ -368,6 +368,7 @@ script = ExtResource("1_r1yhx")
 sprite_frames = SubResource("SpriteFrames_fxb3f")
 animation = &"idle"
 autoplay = "idle"
+frame = 1
 flip_h = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -421,6 +422,8 @@ monitorable = false
 position = Vector2(0, 4.5)
 shape = SubResource("RectangleShape2D_xjahs")
 debug_color = Color(0.305882, 0.627451, 0, 0.419608)
+
+[node name="InvulnTimer" type="Timer" parent="HurtBox"]
 
 [node name="HitBox" type="Area2D" parent="."]
 collision_layer = 8

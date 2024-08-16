@@ -36,4 +36,4 @@ func _attack():
 func _attack_enabled(input: bool):
 	for child in attack_box.get_children():
 		if child.is_class("CollisionShape2D"):
-				child.disabled = !input
+			child.disabled = !input
