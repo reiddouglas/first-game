@@ -164,7 +164,8 @@ func _on_hurt_box_area_entered(hitbox: Area2D):
 		var damage = entity._get_attack_power()
 		_set_health(_get_health()-damage)
 		emit_signal("health_changed")
-		print("Entity " + str(entity) + " did " + str(damage) + " damage")
+		print(entity.name + " did " + str(damage) + " damage to " + name)
+		print(name + " has " + str(health) + "/" + str(max_health) + " health remaining.")
 		
 		#Kill entity if health reaches zero
 		if _get_health() <= 0:
@@ -172,4 +173,4 @@ func _on_hurt_box_area_entered(hitbox: Area2D):
 			_death()
 
 	else:
-		printerr("Entity " + str(entity) + " is not valid")
+		printerr( str(entity) + " is not valid")

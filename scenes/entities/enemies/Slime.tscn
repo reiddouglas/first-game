@@ -219,7 +219,7 @@ tracks/2/loop_wrap = true
 tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
+"update": 1,
 "values": [Vector2(17.5, -0.75)]
 }
 
@@ -340,7 +340,7 @@ input_1/reset = true
 animation = &"idle"
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_yfe35"]
-graph_offset = Vector2(-467.869, 36.2591)
+graph_offset = Vector2(-371.457, 27.7607)
 nodes/attack/node = SubResource("AnimationNodeAnimation_64idr")
 nodes/attack/position = Vector2(-160, 300)
 nodes/attacking_state/node = SubResource("AnimationNodeTransition_otmw5")
@@ -366,9 +366,8 @@ script = ExtResource("1_r1yhx")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_fxb3f")
-animation = &"attack"
+animation = &"idle"
 autoplay = "idle"
-frame = 2
 flip_h = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -381,7 +380,6 @@ deterministic = true
 libraries = {
 "": SubResource("AnimationLibrary_fv7ug")
 }
-autoplay = "idle"
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
 libraries = {
@@ -389,9 +387,9 @@ libraries = {
 }
 tree_root = SubResource("AnimationNodeBlendTree_yfe35")
 anim_player = NodePath("../AnimationPlayer")
-parameters/attacking_state/current_state = "attacking"
+parameters/attacking_state/current_state = "not_attacking"
 parameters/attacking_state/transition_request = ""
-parameters/attacking_state/current_index = 1
+parameters/attacking_state/current_index = 0
 
 [node name="AttackBox" type="Area2D" parent="."]
 collision_layer = 8
@@ -403,6 +401,7 @@ shape = SubResource("RectangleShape2D_2wa6i")
 debug_color = Color(0.835294, 0.388235, 0, 0.419608)
 
 [node name="AttackTimer" type="Timer" parent="AttackBox"]
+wait_time = 1.5
 one_shot = true
 
 [node name="DetectionBox" type="Area2D" parent="."]
