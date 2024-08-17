@@ -114,6 +114,7 @@ func _get_invuln_time():
 @onready var animation_tree = $AnimationTree
 @onready var hurt_box = $HurtBox
 @onready var invuln_timer = $HurtBox/InvulnTimer
+@onready var hitstun_timer = $HurtBox/HitstunTimer
 @onready var hit_box = $HitBox
 
 func _ready():
@@ -188,6 +189,8 @@ func _on_hurt_box_area_entered(hitbox: Area2D):
 			#Invuln frames if entity survives the attack
 			_invuln_enabled(true)
 			invuln_timer.start()
+			#Hitstun for entity after being hit
+			
 
 	else:
 		printerr( str(entity) + " is not valid")
