@@ -357,6 +357,7 @@ tracks/1/keys = {
 [sub_resource type="Animation" id="Animation_s2g6n"]
 resource_name = "hit"
 length = 0.1
+loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -467,7 +468,7 @@ animation = &"invulnerable"
 animation = &"not_invulnerable"
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_yfe35"]
-graph_offset = Vector2(-376.248, -4.23553)
+graph_offset = Vector2(-200.723, 151.23)
 nodes/attack/node = SubResource("AnimationNodeAnimation_64idr")
 nodes/attack/position = Vector2(-160, 300)
 nodes/attacking_state/node = SubResource("AnimationNodeTransition_otmw5")
@@ -534,7 +535,7 @@ parameters/attacking_state/current_index = 0
 parameters/hit_state/current_state = "not_hit"
 parameters/hit_state/transition_request = ""
 parameters/hit_state/current_index = 0
-parameters/invuln_add/add_amount = 0
+parameters/invuln_add/add_amount = 1.0
 parameters/invuln_state/current_state = ""
 parameters/invuln_state/transition_request = ""
 parameters/invuln_state/current_index = -1
@@ -574,6 +575,8 @@ shape = SubResource("RectangleShape2D_xjahs")
 debug_color = Color(0.305882, 0.627451, 0, 0.419608)
 
 [node name="InvulnTimer" type="Timer" parent="HurtBox"]
+
+[node name="HitstunTimer" type="Timer" parent="HurtBox"]
 
 [node name="HitBox" type="Area2D" parent="."]
 visible = false

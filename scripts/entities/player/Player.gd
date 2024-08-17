@@ -4,13 +4,13 @@ extends Entity
 signal gold_changed
 
 #Unique Player attributes
-var gold: int: set = _set_gold, get = _get_gold
+var gold: int: set = set_gold, get = get_gold
 
 #Setters and Getters
-func _set_gold(new_gold: int):
+func set_gold(new_gold: int):
 	gold = max(new_gold,0)
 
-func _get_gold():
+func get_gold():
 	return gold
 
 #Ready functions
@@ -24,19 +24,24 @@ func _ready():
 	floor_snap_length = 5.0 #prevent character from bouncing down slopes
 	
 	#physics stats
-	_set_max_horizontal_velocity(250)
-	_set_max_vertical_velocity(500)
-	_set_friction(1000)
-	_set_air_resistance(500)
-	_set_jump_acceleration(Constants.GRAVITY + 500 * 60)
+	set_max_horizontal_velocity(250)
+	set_max_vertical_velocity(500)
+	set_friction(1000)
+	set_air_resistance(500)
+	set_jump_acceleration(Constants.GRAVITY + 500 * 60)
 	
 	#player stats
-	_set_max_health(PlayerData.max_health)
-	_set_health(PlayerData.health)
-	_set_speed(PlayerData.speed)
-	_set_attack_power(PlayerData.attack_power)
-	_set_invuln_time(PlayerData.invuln_time)
-	_set_gold(PlayerData.gold)
+	set_max_health(PlayerData.max_health)
+	set_health(PlayerData.health)
+	set_speed(PlayerData.speed)
+	set_attack_power(PlayerData.attack_power)
+	set_invuln_time(PlayerData.invuln_time)
+	set_stun_time(PlayerData.stun_time)
+	set_gold(PlayerData.gold)
+	
+	#set timers
+	invuln_timer.wait_time = get_invuln_time()
+	hitstun_timer.wait_time = get_stun_time()
 
 func start(pos):
 	position = pos
@@ -45,28 +50,31 @@ func start(pos):
 
 #60 times a second
 func _physics_process(delta):
-
-	if attacking == false:
-		
-		animation_tree.set("parameters/attacking_state/transition_request","not_attacking")
-		
-		get_input_axis()
+	
+	if stunned == false and attacking == false:
+		#Check for player movement input
+		direction = get_input_axis()
 		if is_on_floor():
-			#Check for attack and interupt ground movement
+			#Check for player attack input
 			if Input.is_action_just_pressed("attack"):
-				_attack()
-			move_ground(delta)
-		else:
-			move_air(delta)
-		
-		if sign(velocity.x) != 0:
-			face_direction(sign(velocity.x))
+				_attack_enabled(true)
+	else:
+		#reset player movement input
+		direction = Vector2.ZERO
+	
+	if is_on_floor():
+		move_ground(delta)
+	else:
+		move_air(delta)
+	if sign(velocity.x) != 0:
+		face_direction(sign(velocity.x))
 
 
 func get_input_axis():
-	direction.x = int(Input.is_action_pressed("move_right")) - int(Input.is_action_pressed("move_left"))
-	direction.y = int(Input.is_action_just_pressed("move_down")) - int(Input.is_action_just_pressed("jump"))
-	direction.normalized()
+	var input_axis = Vector2.ZERO
+	input_axis.x = int(Input.is_action_pressed("move_right")) - int(Input.is_action_pressed("move_left"))
+	input_axis.y = int(Input.is_action_just_pressed("move_down")) - int(Input.is_action_just_pressed("jump"))
+	return input_axis.normalized()
 
 func move_ground(delta):
 	animation_tree.set("parameters/in_air_state/transition_request","ground")
@@ -116,11 +124,14 @@ func move_air(delta):
 func face_direction(horizontal_direction):
 	scale.x = scale.y * horizontal_direction
 
-func _attack():
-	attacking = true
-	animation_tree.set("parameters/attacking_state/transition_request","attacking")
+func _attack_enabled(input: bool):
+	attacking = input
+	if input:
+		animation_tree.set("parameters/attacking_state/transition_request","attacking")
+		velocity = Vector2.ZERO
+	else:
+		animation_tree.set("parameters/attacking_state/transition_request","not_attacking")
 
 func _on_animation_finished(anim_name: StringName):
-	print(anim_name)
 	if anim_name.contains("attack"):
-		attacking = false
+		_attack_enabled(false)

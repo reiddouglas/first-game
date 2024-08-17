@@ -1371,6 +1371,7 @@ tracks/1/keys = {
 [sub_resource type="Animation" id="Animation_dln3e"]
 resource_name = "hit"
 length = 0.1
+loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -1530,7 +1531,7 @@ animation = &"run"
 animation = &"turn"
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_tmxls"]
-graph_offset = Vector2(231.924, 483.794)
+graph_offset = Vector2(-73.172, 363.437)
 nodes/Add2/node = SubResource("AnimationNodeAdd2_lka2b")
 nodes/Add2/position = Vector2(1680, 1100)
 nodes/attack/node = SubResource("AnimationNodeAnimation_4e6re")
