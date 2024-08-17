@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3 uid="uid://4h3q4qr7swiy"]
+[gd_scene load_steps=42 format=3 uid="uid://4h3q4qr7swiy"]
 
 [ext_resource type="Texture2D" uid="uid://cgrkyeec6xmfx" path="res://sprites/Slime/slime-Sheet.png" id="1_qe0rk"]
 [ext_resource type="Script" path="res://scripts/entities/enemies/Slime.gd" id="1_r1yhx"]
@@ -43,6 +43,18 @@ region = Rect2(96, 50, 32, 25)
 atlas = ExtResource("1_qe0rk")
 region = Rect2(128, 50, 32, 25)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_eicu5"]
+atlas = ExtResource("1_qe0rk")
+region = Rect2(160, 25, 32, 25)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g82yh"]
+atlas = ExtResource("1_qe0rk")
+region = Rect2(192, 25, 32, 25)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uq6ek"]
+atlas = ExtResource("1_qe0rk")
+region = Rect2(224, 25, 32, 25)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_40pal"]
 atlas = ExtResource("1_qe0rk")
 region = Rect2(0, 0, 32, 25)
@@ -74,18 +86,6 @@ region = Rect2(192, 0, 32, 25)
 [sub_resource type="AtlasTexture" id="AtlasTexture_5j1mb"]
 atlas = ExtResource("1_qe0rk")
 region = Rect2(224, 0, 32, 25)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_eicu5"]
-atlas = ExtResource("1_qe0rk")
-region = Rect2(160, 25, 32, 25)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_g82yh"]
-atlas = ExtResource("1_qe0rk")
-region = Rect2(192, 25, 32, 25)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_uq6ek"]
-atlas = ExtResource("1_qe0rk")
-region = Rect2(224, 25, 32, 25)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_fxb3f"]
 animations = [{
@@ -131,6 +131,20 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_eicu5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g82yh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uq6ek")
+}],
+"loop": true,
+"name": &"hit",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_40pal")
 }, {
 "duration": 1.0,
@@ -162,20 +176,6 @@ animations = [{
 "loop": true,
 "name": &"move",
 "speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_eicu5")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_g82yh")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_uq6ek")
-}],
-"loop": true,
-"name": &"new_animation",
-"speed": 10.0
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vk77x"]
@@ -221,6 +221,42 @@ tracks/2/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [Vector2(17.5, -0.75)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("AnimatedSprite2D:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("AnimatedSprite2D:frame")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("AnimatedSprite2D:animation")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"hit"]
 }
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xvpom"]
@@ -318,10 +354,52 @@ tracks/1/keys = {
 "values": [0, 1, 2, 3]
 }
 
+[sub_resource type="Animation" id="Animation_s2g6n"]
+resource_name = "hit"
+length = 0.2
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("AnimatedSprite2D:animation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [&"hit"]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("AnimatedSprite2D:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [Color(1, 1, 1, 0.490196), Color(1, 1, 1, 1)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_fv7ug"]
 _data = {
 "RESET": SubResource("Animation_nab5d"),
 "attack": SubResource("Animation_oeseo"),
+"hit": SubResource("Animation_s2g6n"),
 "idle": SubResource("Animation_o22n2")
 }
 
@@ -336,18 +414,34 @@ input_1/name = "attacking"
 input_1/auto_advance = false
 input_1/reset = true
 
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_ugcb0"]
+animation = &"hit"
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_5ykvq"]
+input_0/name = "not_hit"
+input_0/auto_advance = false
+input_0/reset = true
+input_1/name = "hit"
+input_1/auto_advance = false
+input_1/reset = true
+
 [sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_d11ca"]
 animation = &"idle"
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_yfe35"]
-graph_offset = Vector2(-371.457, 27.7607)
+graph_offset = Vector2(-438.008, 75.7009)
 nodes/attack/node = SubResource("AnimationNodeAnimation_64idr")
 nodes/attack/position = Vector2(-160, 300)
 nodes/attacking_state/node = SubResource("AnimationNodeTransition_otmw5")
-nodes/attacking_state/position = Vector2(100, 140)
+nodes/attacking_state/position = Vector2(60, 240)
+nodes/hit/node = SubResource("AnimationNodeAnimation_ugcb0")
+nodes/hit/position = Vector2(-160, 520)
+nodes/hit_state/node = SubResource("AnimationNodeTransition_5ykvq")
+nodes/hit_state/position = Vector2(300, 220)
 nodes/idle/node = SubResource("AnimationNodeAnimation_d11ca")
-nodes/idle/position = Vector2(-160, 160)
-node_connections = [&"attacking_state", 0, &"idle", &"attacking_state", 1, &"attack", &"output", 0, &"attacking_state"]
+nodes/idle/position = Vector2(-160, 720)
+nodes/output/position = Vector2(520, 220)
+node_connections = [&"attacking_state", 0, &"idle", &"attacking_state", 1, &"attack", &"hit_state", 0, &"attacking_state", &"hit_state", 1, &"hit", &"output", 0, &"hit_state"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_2wa6i"]
 size = Vector2(38, 35)
@@ -366,12 +460,12 @@ script = ExtResource("1_r1yhx")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_fxb3f")
-animation = &"idle"
+animation = &"hit"
 autoplay = "idle"
-frame = 1
 flip_h = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 position = Vector2(0, 1.5)
 shape = SubResource("RectangleShape2D_vk77x")
 debug_color = Color(0, 0.596078, 0.72549, 0.419608)
@@ -391,8 +485,12 @@ anim_player = NodePath("../AnimationPlayer")
 parameters/attacking_state/current_state = "not_attacking"
 parameters/attacking_state/transition_request = ""
 parameters/attacking_state/current_index = 0
+parameters/hit_state/current_state = "not_hit"
+parameters/hit_state/transition_request = ""
+parameters/hit_state/current_index = 0
 
 [node name="AttackBox" type="Area2D" parent="."]
+visible = false
 collision_layer = 8
 monitorable = false
 
@@ -406,6 +504,7 @@ wait_time = 1.5
 one_shot = true
 
 [node name="DetectionBox" type="Area2D" parent="."]
+visible = false
 collision_layer = 8
 monitorable = false
 
@@ -415,6 +514,7 @@ shape = SubResource("RectangleShape2D_lxfcm")
 debug_color = Color(0, 0, 1, 0.419608)
 
 [node name="HurtBox" type="Area2D" parent="."]
+visible = false
 collision_layer = 8
 monitorable = false
 
@@ -426,6 +526,7 @@ debug_color = Color(0.305882, 0.627451, 0, 0.419608)
 [node name="InvulnTimer" type="Timer" parent="HurtBox"]
 
 [node name="HitBox" type="Area2D" parent="."]
+visible = false
 collision_layer = 8
 collision_mask = 5
 monitoring = false
