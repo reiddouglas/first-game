@@ -3,15 +3,25 @@ extends Enemy
 func _ready():
 	super._ready()
 	
-	#physics
-	_set_max_horizontal_velocity(1000)
-	_set_max_vertical_velocity(1000)
+	#physics stats
+	set_max_horizontal_velocity(250)
+	set_max_vertical_velocity(500)
+	set_friction(1000)
+	set_air_resistance(500)
+	set_jump_acceleration(Constants.GRAVITY + 500 * 60)
 	
-	#stats
-	_set_max_health(100)
-	_fill_health()
-	_set_attack_power(15)
-	_set_speed(50)
+	#player stats
+	set_max_health(200)
+	set_speed(50)
+	set_attack_power(15)
+	set_invuln_time(2)
+	set_stun_time(1)
+	
+	#set timers
+	invuln_timer.wait_time = get_invuln_time()
+	hitstun_timer.wait_time = get_stun_time()
+
+	fill_health()
 
 func _physics_process(delta):
 	
