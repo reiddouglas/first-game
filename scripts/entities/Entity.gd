@@ -116,6 +116,7 @@ func get_stun_time():
 	return stun_time
 
 #Ready functions
+@onready var direction = Vector2.ZERO
 @onready var sprite = $AnimatedSprite2D
 @onready var animation_player = $AnimationPlayer
 @onready var animation_tree = $AnimationTree
@@ -125,6 +126,8 @@ func get_stun_time():
 @onready var hit_box = $HitBox
 
 func _ready():
+	floor_snap_length = 5.0 #prevent entity from bouncing down slopes
+	
 	hurt_box.area_entered.connect(_on_hurt_box_area_entered)
 	invuln_timer.timeout.connect(_on_invuln_timer_timeout)
 	hitstun_timer.timeout.connect(_on_hitstun_timer_timeout)

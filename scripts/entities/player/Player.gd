@@ -14,14 +14,13 @@ func get_gold():
 	return gold
 
 #Ready functions
-@onready var direction = Vector2.ZERO
+
 
 func _ready():
 	super._ready()
 	
 	animation_tree.animation_finished.connect(_on_animation_finished)
 	animation_tree.active = true
-	floor_snap_length = 5.0 #prevent character from bouncing down slopes
 	
 	#physics stats
 	set_max_horizontal_velocity(250)
