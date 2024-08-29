@@ -511,7 +511,7 @@ animation = &"hit"
 autoplay = "idle"
 flip_h = true
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionBox" type="CollisionShape2D" parent="."]
 visible = false
 position = Vector2(0, 1.5)
 shape = SubResource("RectangleShape2D_vk77x")
@@ -524,6 +524,9 @@ libraries = {
 }
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_fv7ug")
+}
 tree_root = SubResource("AnimationNodeBlendTree_yfe35")
 anim_player = NodePath("../AnimationPlayer")
 parameters/attacking_state/current_state = "not_attacking"
@@ -533,9 +536,9 @@ parameters/hit_state/current_state = "not_hit"
 parameters/hit_state/transition_request = ""
 parameters/hit_state/current_index = 0
 parameters/invuln_add/add_amount = 1.0
-parameters/invuln_state/current_state = ""
+parameters/invuln_state/current_state = "not_invuln"
 parameters/invuln_state/transition_request = ""
-parameters/invuln_state/current_index = -1
+parameters/invuln_state/current_index = 0
 
 [node name="AttackBox" type="Area2D" parent="."]
 visible = false
