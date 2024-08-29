@@ -34,6 +34,7 @@ func _ready():
 	set_health(PlayerData.health)
 	set_speed(PlayerData.speed)
 	set_attack_power(PlayerData.attack_power)
+	set_knock_power(PlayerData.knock_power)
 	set_invuln_time(PlayerData.invuln_time)
 	set_stun_time(PlayerData.stun_time)
 	set_gold(PlayerData.gold)
