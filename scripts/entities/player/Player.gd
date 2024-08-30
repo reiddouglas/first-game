@@ -27,7 +27,7 @@ func _ready():
 	set_max_vertical_speed(400)
 	set_friction(400)
 	set_air_resistance(500)
-	set_jump_accel(Constants.GRAVITY + 600 * 60)
+	set_jump_accel(Constants.GRAVITY + 800 * 60)
 	
 	#player stats
 	set_max_health(100)

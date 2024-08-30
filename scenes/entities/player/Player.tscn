@@ -1578,7 +1578,6 @@ modulate = Color(1, 1, 1, 0.490196)
 position = Vector2(4, -39)
 sprite_frames = SubResource("SpriteFrames_or53a")
 animation = &"jump"
-frame = 1
 
 [node name="CollisionBox" type="CollisionShape2D" parent="."]
 visible = false
