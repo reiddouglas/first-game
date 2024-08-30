@@ -17,7 +17,6 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-PlayerData="*res://scripts/autoloads/PlayerData.gd"
 Constants="*res://scripts/autoloads/Constants.gd"
 
 [display]

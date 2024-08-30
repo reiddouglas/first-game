@@ -9,16 +9,16 @@ signal death
 
 #Variables
 #Physics
-var max_horizontal_velocity: int: set = set_max_horizontal_velocity, get = get_max_horizontal_velocity
-var max_vertical_velocity: int: set = set_max_vertical_velocity, get = get_max_vertical_velocity
+var max_horizontal_speed: int: set = set_max_horizontal_speed, get = get_max_horizontal_speed
+var max_vertical_speed: int: set = set_max_vertical_speed, get = get_max_vertical_speed
 var friction: int: set = set_friction, get = get_friction
 var air_resistance: int: set = set_air_resistance, get = get_air_resistance
-var jump_acceleration: int: set = set_jump_acceleration, get = get_jump_acceleration
+var jump_accel: int: set = set_jump_accel, get = get_jump_accel
 var gravity_mult: float = 1: set = set_gravity_mult, get = get_gravity_mult
+var accel: int: set = set_accel, get = get_accel
+var accel_mult: float = 1: set = set_accel_mult, get = get_accel_mult
 
 #Entity stats
-var speed: int: set = set_speed, get = get_speed
-var speed_mult: float = 1: set = set_speed_mult, get = get_speed_mult
 var max_health: int: set = set_max_health, get = get_max_health
 var health: int: set = set_health, get = get_health
 var attack_power: int: set = set_attack_power, get = get_attack_power
@@ -32,17 +32,17 @@ var stunned: bool = false
 var invulnerable: bool = false
 
 #Setters and Getters
-func set_max_horizontal_velocity(new_max_velocity):
-	max_horizontal_velocity =  max(new_max_velocity,0)
+func set_max_horizontal_speed(new_max_speed):
+	max_horizontal_speed =  max(new_max_speed,0)
 
-func get_max_horizontal_velocity():
-	return max_horizontal_velocity
+func get_max_horizontal_speed():
+	return max_horizontal_speed
 
-func set_max_vertical_velocity(new_max_velocity):
-	max_vertical_velocity =  max(new_max_velocity,0)
+func set_max_vertical_speed(new_max_speed):
+	max_vertical_speed =  max(new_max_speed,0)
 
-func get_max_vertical_velocity():
-	return max_vertical_velocity
+func get_max_vertical_speed():
+	return max_vertical_speed
 
 func set_friction(new_friction):
 	friction =  max(new_friction,0)
@@ -56,11 +56,11 @@ func set_air_resistance(new_resistance):
 func get_air_resistance():
 	return air_resistance
 
-func set_jump_acceleration(new_acceleration):
-	jump_acceleration =  max(new_acceleration,0)
+func set_jump_accel(new_acceleration):
+	jump_accel =  max(new_acceleration,0)
 
-func get_jump_acceleration():
-	return jump_acceleration
+func get_jump_accel():
+	return jump_accel
 
 func set_gravity_mult(new_mult: float):
 	gravity_mult = max(new_mult,0)
@@ -68,17 +68,17 @@ func set_gravity_mult(new_mult: float):
 func get_gravity_mult():
 	return gravity_mult
 
-func set_speed_mult(new_mult: float):
-	speed_mult = max(new_mult,0)
+func set_accel_mult(new_mult: float):
+	accel_mult = max(new_mult,0)
 
-func get_speed_mult():
-	return speed_mult
+func get_accel_mult():
+	return accel_mult
 
-func set_speed(new_speed: int):
-	speed = max(new_speed,0)
+func set_accel(new_accel: int):
+	accel = max(new_accel,0)
 
-func get_speed():
-	return speed
+func get_accel():
+	return accel
 
 func set_max_health(new_max_health: int):
 	if max_health != null:
@@ -142,43 +142,82 @@ func _ready():
 	invuln_timer.wait_time = invuln_time
 	hitstun_timer.wait_time = stun_time
 
-func apply_horizontal_ground_friction(delta):
-	apply_horizontal_friction(friction, delta)
-
-func apply_horizontal_air_resistance(delta):
-	apply_horizontal_friction(air_resistance, delta)
-	
-func apply_horizontal_friction(friction, delta):
-	var amount = friction * delta
-	if abs(velocity.x) > amount:
-		velocity.x -= sign(velocity.x) * amount
-	else:
-		velocity.x = 0
-
-func apply_vertical_friction(friction, delta):
-	var amount = friction * delta
-	if abs(velocity.y) > amount:
-		velocity.y -= sign(velocity.y) * amount
-	else:
-		velocity.y = 0
-
-func apply_movement(dir, accel, delta):
+"""
+Function: move
+Description: moves the character in the given direction on the ground or air
+Input:
+	dir - the direction of the movement in Vector2 form
+	delta - the delta function from get_physics_process_delta_time()
+Output:
+	void
+"""
+func move(dir: Vector2, accel: int, delta):
 	velocity += dir * accel * delta
-	velocity.x = sign(velocity.x) * min(abs(velocity.x), max_horizontal_velocity)
-	velocity.y = sign(velocity.y) * min(abs(velocity.y), max_vertical_velocity)
 
-func apply_jump(delta):
-	apply_movement(Vector2.UP, jump_acceleration, delta)
-	
-func apply_fall(delta):
-	apply_movement(Vector2.DOWN, jump_acceleration, delta)
+"""
+Function: jump
+Description: applies the jump acceleration upwards for a fraction of a second
+Input:
+	delta - the delta function from get_physics_process_delta_time()
+Output:
+	void
+"""
+func jump(delta):
+	move(Vector2.UP, get_jump_accel(), delta)
 
+"""
+Function: apply_friction
+Description: applies friction and air resistance against entity movement.
+Input:
+	delta - the delta function from get_physics_process_delta_time()
+Output:
+	void
+"""
+func apply_friction(delta):
+	var initial_velocity: Vector2 = get_velocity()
+	if is_on_floor():
+		if(abs(initial_velocity.x) > 0):
+			var dynamic_friction = get_friction() + (get_accel() - get_friction()) * abs(get_velocity().x)/get_max_horizontal_speed()
+			velocity.x -= sign(velocity.x) * dynamic_friction * delta
+			if sign(get_velocity().x) != sign(initial_velocity.x):
+				velocity.x = 0
+	else:
+		if(abs(initial_velocity.x) > 0):
+			var dynamic_friction = get_air_resistance() + (get_accel() - get_air_resistance()) * abs(get_velocity().x)/get_max_horizontal_speed()
+			velocity.x -= sign(velocity.x) * dynamic_friction * delta
+			if sign(get_velocity().x) != sign(initial_velocity.x):
+				velocity.x = 0
+		if(abs(initial_velocity.y) > 0):
+			# the get_accel in this calculation makes air acceleration work differently when jumping/falling, which is fine.
+			var dynamic_friction = get_air_resistance() + (get_accel() - get_air_resistance()) * abs(get_velocity().y)/get_max_vertical_speed()
+			velocity.y -= sign(velocity.y) * dynamic_friction * delta
+			if sign(get_velocity().y) != sign(initial_velocity.y):
+				velocity.y = 0
+	print(get_velocity())
+
+"""
+Function: apply_gravity
+Description: applies the downward acceleration due to gravity
+Input:
+	delta - the delta function from get_physics_process_delta_time()
+Output:
+	void
+"""
 func apply_gravity(delta):
-	apply_movement(Vector2.DOWN, Constants.GRAVITY, delta)
+	move(Vector2.DOWN, Constants.GRAVITY * get_gravity_mult(), delta)
 
-# Horizontal direction is the new direction the entity wants to face
-func switch_direction(horizontal_direction):
-	sprite.flip_h = (horizontal_direction == -1)
+"""
+Function: face_direction
+Description: turns the entity to face the given direction. care for entities
+			 with sprites facing the negative x direction, since this function will
+			 do the opposite of what you want
+Input:
+	delta - the delta function from get_physics_process_delta_time()
+Output:
+	void
+"""
+func face_direction(horizontal_direction):
+	scale.x = scale.y * horizontal_direction
 
 #Health
 func fill_health():
@@ -194,7 +233,7 @@ func _on_hurt_box_area_entered(hitbox: Area2D):
 		return
 	var entity: Entity = hitbox.get_parent()
 	if entity:
-		#Deal damage to entity if hit
+		#Deal damage to this entity if hit
 		if take_damage(entity):
 			return
 		#Invuln frames if entity survives the attack
@@ -203,7 +242,7 @@ func _on_hurt_box_area_entered(hitbox: Area2D):
 		#Hitstun for entity after being hit
 		_hitstun_enabled(true)
 		hitstun_timer.start()
-		#Knock enemy back as well
+		#Get knocked back as well
 		take_knockback(entity)
 
 	else:
