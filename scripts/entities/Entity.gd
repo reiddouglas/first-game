@@ -177,18 +177,23 @@ func apply_friction(delta):
 	var initial_velocity: Vector2 = get_velocity()
 	if is_on_floor():
 		if(abs(initial_velocity.x) > 0):
-			velocity.x -= sign(velocity.x) * (get_friction() + max(0,abs(get_velocity().x) - get_max_horizontal_speed())) * delta
+			var dynamic_friction = get_friction() + (get_accel() - get_friction()) * abs(get_velocity().x)/get_max_horizontal_speed()
+			velocity.x -= sign(velocity.x) * dynamic_friction * delta
 			if sign(get_velocity().x) != sign(initial_velocity.x):
 				velocity.x = 0
 	else:
 		if(abs(initial_velocity.x) > 0):
-			velocity.x -= sign(velocity.x) * (get_air_resistance() + max(0,abs(get_velocity().x) - get_max_horizontal_speed())) * delta
+			var dynamic_friction = get_air_resistance() + (get_accel() - get_air_resistance()) * abs(get_velocity().x)/get_max_horizontal_speed()
+			velocity.x -= sign(velocity.x) * dynamic_friction * delta
 			if sign(get_velocity().x) != sign(initial_velocity.x):
 				velocity.x = 0
 		if(abs(initial_velocity.y) > 0):
-			velocity.y -= sign(velocity.y) * (get_air_resistance() + max(0,abs(get_velocity().y) - get_max_vertical_speed())) * delta
+			# the get_accel in this calculation makes air acceleration work differently when jumping/falling, which is fine.
+			var dynamic_friction = get_air_resistance() + (get_accel() - get_air_resistance()) * abs(get_velocity().y)/get_max_vertical_speed()
+			velocity.y -= sign(velocity.y) * dynamic_friction * delta
 			if sign(get_velocity().y) != sign(initial_velocity.y):
 				velocity.y = 0
+	print(get_velocity())
 
 """
 Function: apply_gravity

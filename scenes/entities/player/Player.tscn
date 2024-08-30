@@ -1531,7 +1531,6 @@ animation = &"run"
 animation = &"turn"
 
 [sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_tmxls"]
-graph_offset = Vector2(-282.784, 419.448)
 nodes/Add2/node = SubResource("AnimationNodeAdd2_lka2b")
 nodes/Add2/position = Vector2(1680, 1100)
 nodes/attack/node = SubResource("AnimationNodeAnimation_4e6re")

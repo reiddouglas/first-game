@@ -23,7 +23,7 @@ func _ready():
 	animation_tree.active = true
 	
 	#physics stats
-	set_max_horizontal_speed(200)
+	set_max_horizontal_speed(300)
 	set_max_vertical_speed(400)
 	set_friction(400)
 	set_air_resistance(500)
@@ -32,7 +32,7 @@ func _ready():
 	#player stats
 	set_max_health(100)
 	set_health(100)
-	set_accel(700)
+	set_accel(1000)
 	set_attack_power(50)
 	set_knock_power(1000)
 	set_invuln_time(2.5)
