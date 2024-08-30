@@ -5,6 +5,7 @@ signal gold_changed
 
 #Unique Player attributes
 var gold: int: set = set_gold, get = get_gold
+var on_wall = false
 
 #Setters and Getters
 func set_gold(new_gold: int):
@@ -26,7 +27,7 @@ func _ready():
 	set_max_horizontal_speed(300)
 	set_max_vertical_speed(400)
 	set_friction(400)
-	set_air_resistance(500)
+	set_air_resistance(300)
 	set_jump_accel(Constants.GRAVITY + 800 * 60)
 	
 	#player stats
@@ -50,7 +51,6 @@ func start(pos):
 
 #60 times a second
 func _physics_process(delta):
-	
 	if stunned == false and attacking == false:
 		#Check for player movement input
 		direction = get_input_axis()
@@ -61,13 +61,10 @@ func _physics_process(delta):
 	else:
 		#reset player movement input
 		direction = Vector2.ZERO
-	
 	if is_on_floor():
 		move_ground(delta)
 	else:
 		move_air(delta)
-	if sign(velocity.x) != 0:
-		face_direction(sign(velocity.x))
 	
 	apply_friction(delta)
 	apply_gravity(delta)
@@ -96,22 +93,37 @@ func move_ground(delta):
 	#jumping
 	if direction.y < 0 and is_on_floor():
 		jump(delta)
+	face_direction(sign(velocity.x))
 	
 func move_air(delta):
 	animation_tree.set("parameters/in_air_state/transition_request","air")
-	move(direction * Vector2.RIGHT, get_accel() * get_accel_mult(), delta)
-	#applying the "fast_fall" movement
-	if direction.y > 0:
-		fast_fall(delta)
-	# falling animation
-	if velocity.y > 0:
-		animation_tree.set("parameters/in_air_movement/transition_request","falling")
-	# jumping animation
+	if is_on_wall():
+		#need to get player to "stick" to the wall, otherwise is_on_wall will return false
+		if (direction.x == 0 or sign(direction.x) != sign(get_wall_normal().x)) and direction.y >= 0:
+			move(-get_wall_normal() * Vector2.RIGHT, get_accel() * get_accel_mult(), delta)
+		#add sliding down wall logic here
+		face_direction(get_wall_normal().x)
+		animation_tree.set("parameters/in_air_movement/transition_request","wall_sliding")
+		if direction.y < 0:
+			wall_jump(delta)
 	else:
-		animation_tree.set("parameters/in_air_movement/transition_request","jumping")
+		move(direction * Vector2.RIGHT, get_accel() * get_accel_mult(), delta)
+		#applying the "fast_fall" movement
+		if direction.y > 0:
+			fast_fall(delta)
+		# falling animation
+		if velocity.y > 0:
+			animation_tree.set("parameters/in_air_movement/transition_request","falling")
+		# jumping animation
+		else:
+			animation_tree.set("parameters/in_air_movement/transition_request","jumping")
+		face_direction(sign(velocity.x))
 
 func fast_fall(delta):
 	move(Vector2.DOWN, get_jump_accel(), delta)
+
+func wall_jump(delta):
+	move(Vector2(get_wall_normal().x,-1), get_jump_accel(), delta)
 
 func _attack_enabled(input: bool):
 	attacking = input

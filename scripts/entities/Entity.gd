@@ -151,8 +151,8 @@ Input:
 Output:
 	void
 """
-func move(dir: Vector2, accel: int, delta):
-	velocity += dir * accel * delta
+func move(dir: Vector2, acceleration: int, delta):
+	velocity += dir.normalized() * acceleration * delta
 
 """
 Function: jump
@@ -193,7 +193,6 @@ func apply_friction(delta):
 			velocity.y -= sign(velocity.y) * dynamic_friction * delta
 			if sign(get_velocity().y) != sign(initial_velocity.y):
 				velocity.y = 0
-	print(get_velocity())
 
 """
 Function: apply_gravity
@@ -217,7 +216,8 @@ Output:
 	void
 """
 func face_direction(horizontal_direction):
-	scale.x = scale.y * horizontal_direction
+	if horizontal_direction != 0:
+		scale.x = scale.y * horizontal_direction
 
 #Health
 func fill_health():
