@@ -5,6 +5,7 @@ signal gold_changed
 
 #Unique Player attributes
 var gold: int: set = set_gold, get = get_gold
+var wall_jump_accel: int: set = set_wall_jump_accel, get = get_wall_jump_accel
 var on_wall = false
 
 #Setters and Getters
@@ -13,6 +14,12 @@ func set_gold(new_gold: int):
 
 func get_gold():
 	return gold
+
+func set_wall_jump_accel(new_accel: int):
+	wall_jump_accel = new_accel
+
+func get_wall_jump_accel():
+	return wall_jump_accel
 
 #Ready functions
 
@@ -24,11 +31,13 @@ func _ready():
 	animation_tree.active = true
 	
 	#physics stats
+	set_gravity_mult(2)
 	set_max_horizontal_speed(300)
-	set_max_vertical_speed(400)
+	set_max_vertical_speed(700)
 	set_friction(400)
 	set_air_resistance(300)
-	set_jump_accel(Constants.GRAVITY + 800 * 60)
+	set_jump_accel(Constants.GRAVITY * get_gravity_mult() + 800 * 60)
+	set_wall_jump_accel(Constants.GRAVITY * get_gravity_mult() + 1000 * 60)
 	
 	#player stats
 	set_max_health(100)
@@ -67,7 +76,6 @@ func _physics_process(delta):
 		move_air(delta)
 	
 	apply_friction(delta)
-	apply_gravity(delta)
 	move_and_slide()
 
 
@@ -102,8 +110,10 @@ func move_air(delta):
 		if (direction.x == 0 or sign(direction.x) != sign(get_wall_normal().x)) and direction.y >= 0:
 			move(-get_wall_normal() * Vector2.RIGHT, get_accel() * get_accel_mult(), delta)
 		#add sliding down wall logic here
+		wall_slide(delta)
 		face_direction(get_wall_normal().x)
 		animation_tree.set("parameters/in_air_movement/transition_request","wall_sliding")
+		
 		if direction.y < 0:
 			wall_jump(delta)
 	else:
@@ -118,12 +128,17 @@ func move_air(delta):
 		else:
 			animation_tree.set("parameters/in_air_movement/transition_request","jumping")
 		face_direction(sign(velocity.x))
+		apply_gravity(delta)
 
 func fast_fall(delta):
 	move(Vector2.DOWN, get_jump_accel(), delta)
 
 func wall_jump(delta):
-	move(Vector2(get_wall_normal().x,-1), get_jump_accel(), delta)
+	move(Vector2(get_wall_normal().x,-1), get_wall_jump_accel(), delta)
+
+func wall_slide(delta):
+	velocity.y = max(velocity.y, 0)
+	move(Vector2.DOWN, Constants.GRAVITY * get_gravity_mult() * 0.2, delta)
 
 func _attack_enabled(input: bool):
 	attacking = input
