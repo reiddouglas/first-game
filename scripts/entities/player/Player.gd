@@ -7,6 +7,7 @@ signal gold_changed
 var gold: int: set = set_gold, get = get_gold
 var wall_jump_accel: int: set = set_wall_jump_accel, get = get_wall_jump_accel
 var on_wall = false
+var rolling = false
 
 #Setters and Getters
 func set_gold(new_gold: int):
@@ -60,7 +61,7 @@ func start(pos):
 
 #60 times a second
 func _physics_process(delta):
-	if stunned == false and attacking == false:
+	if stunned == false and attacking == false and rolling == false:
 		#Check for player movement input
 		direction = get_input_axis()
 		if is_on_floor():
@@ -74,7 +75,6 @@ func _physics_process(delta):
 		move_ground(delta)
 	else:
 		move_air(delta)
-	
 	apply_friction(delta)
 	move_and_slide()
 
@@ -87,23 +87,30 @@ func get_input_axis():
 
 func move_ground(delta):
 	animation_tree.set("parameters/in_air_state/transition_request","ground")
-	#sliding
-	if (direction.x == 0 or sign(direction.x) != sign(velocity.x)) and velocity.x != 0:
-		animation_tree.set("parameters/on_ground_movement/transition_request","turning")
-	#idling
-	elif direction.x == 0 and velocity.x == 0:
-		animation_tree.set("parameters/on_ground_movement/transition_request","idling")
-	#running
-	else:
-		animation_tree.set("parameters/on_ground_movement/transition_request","running")
-		animation_tree.set("parameters/movement_time/scale",abs(get_velocity().x) * 2/get_max_horizontal_speed())
-		move(direction * Vector2.RIGHT, get_accel() * get_accel_mult(), delta)
-	#jumping
-	if direction.y < 0 and is_on_floor():
-		jump(delta)
+	#rolling
+	if rolling == false:
+		if direction.y > 0:
+			animation_tree.set("parameters/on_ground_movement/transition_request","rolling")
+			rolling = true
+			velocity.x = sign(direction.x) * get_max_vertical_speed()
+		#sliding
+		elif (direction.x == 0 or sign(direction.x) != sign(velocity.x)) and velocity.x != 0:
+			animation_tree.set("parameters/on_ground_movement/transition_request","turning")
+		#idling
+		elif direction.x == 0 and velocity.x == 0:
+			animation_tree.set("parameters/on_ground_movement/transition_request","idling")
+		#running
+		else:
+			animation_tree.set("parameters/on_ground_movement/transition_request","running")
+			animation_tree.set("parameters/movement_time/scale",abs(get_velocity().x) * 2/get_max_horizontal_speed())
+			move(direction * Vector2.RIGHT, get_accel() * get_accel_mult(), delta)
+		#jumping
+		if direction.y < 0 and is_on_floor():
+			jump(delta)
 	face_direction(sign(velocity.x))
 	
 func move_air(delta):
+	rolling = false
 	animation_tree.set("parameters/in_air_state/transition_request","air")
 	if is_on_wall():
 		#need to get player to "stick" to the wall, otherwise is_on_wall will return false
@@ -151,3 +158,5 @@ func _attack_enabled(input: bool):
 func _on_animation_finished(anim_name: StringName):
 	if anim_name.contains("attack"):
 		_attack_enabled(false)
+	elif anim_name.contains("roll"):
+		rolling = false
