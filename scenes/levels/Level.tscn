@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://b6wul0x31njey"]
+[gd_scene load_steps=10 format=3 uid="uid://b6wul0x31njey"]
 
 [ext_resource type="Script" path="res://scripts/levels/Level.gd" id="1_f8cr8"]
 [ext_resource type="PackedScene" uid="uid://w48j3wuayjtj" path="res://scenes/ui/PlayerUI.tscn" id="2_6ljmb"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://dumgdiamjo31y" path="res://sprites/Hero's Journey - Moon Graveyard/Tiles.png" id="3_ci6oy"]
 [ext_resource type="PackedScene" uid="uid://wnq6ed1bghg" path="res://scenes/levels/LevelEnd.tscn" id="4_yl1hx"]
 [ext_resource type="PackedScene" uid="uid://4h3q4qr7swiy" path="res://scenes/entities/enemies/Slime.tscn" id="6_lx3hf"]
+[ext_resource type="PackedScene" uid="uid://kw5uhqnujh1e" path="res://scenes/entities/utilities/gold.tscn" id="7_h06nh"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_62lcg"]
 texture = ExtResource("3_ci6oy")
@@ -370,3 +371,27 @@ position = Vector2(549, -47)
 
 [node name="Slime" parent="." instance=ExtResource("6_lx3hf")]
 position = Vector2(407, -44)
+
+[node name="Gold" parent="." instance=ExtResource("7_h06nh")]
+position = Vector2(-472, -131)
+
+[node name="Gold2" parent="." instance=ExtResource("7_h06nh")]
+position = Vector2(-434, -131)
+
+[node name="Gold3" parent="." instance=ExtResource("7_h06nh")]
+position = Vector2(-574, -216)
+
+[node name="Gold4" parent="." instance=ExtResource("7_h06nh")]
+position = Vector2(-573, -286)
+
+[node name="Gold5" parent="." instance=ExtResource("7_h06nh")]
+position = Vector2(-573, -358)
+
+[node name="Gold6" parent="." instance=ExtResource("7_h06nh")]
+position = Vector2(-449, -477)
+
+[node name="Gold7" parent="." instance=ExtResource("7_h06nh")]
+position = Vector2(-727, -478)
+
+[node name="Gold8" parent="." instance=ExtResource("7_h06nh")]
+position = Vector2(-36, -215)

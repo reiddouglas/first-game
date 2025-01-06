@@ -12,6 +12,7 @@ var rolling = false
 #Setters and Getters
 func set_gold(new_gold: int):
 	gold = max(new_gold,0)
+	gold_changed.emit()
 
 func get_gold():
 	return gold
@@ -48,7 +49,7 @@ func _ready():
 	set_knock_power(1000)
 	set_invuln_time(2.5)
 	set_stun_time(1.0)
-	set_gold(999)
+	set_gold(0)
 	
 	#set timers
 	invuln_timer.wait_time = get_invuln_time()
@@ -160,3 +161,9 @@ func _on_animation_finished(anim_name: StringName):
 		_attack_enabled(false)
 	elif anim_name.contains("roll"):
 		rolling = false
+
+func _on_hurt_box_area_entered(hitbox: Area2D):
+	if hitbox.get_parent().is_in_group("Gold"):
+		set_gold(get_gold() + 1)
+	else:
+		super._on_hurt_box_area_entered(hitbox)
